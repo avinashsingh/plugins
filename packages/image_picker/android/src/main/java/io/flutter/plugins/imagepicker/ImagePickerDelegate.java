@@ -477,8 +477,15 @@ public class ImagePickerDelegate
     return true;
   }
 
-  private void finishWithSuccess(String imagePath) {
-    pendingResult.success(imagePath);
+  private void finishWithSuccess(final String imagePath) {
+    // pendingResult.success(imagePath);
+    final MethodChannel.Result result = pendingResult;
+    activity.runOnUiThread(new Runnable() {
+      @Override
+      public void run() {
+        result.success(imagePath);
+      }
+    });
     clearMethodCallAndResult();
   }
 
@@ -486,8 +493,15 @@ public class ImagePickerDelegate
     finishWithError("already_active", "Image picker is already active");
   }
 
-  private void finishWithError(String errorCode, String errorMessage) {
-    pendingResult.error(errorCode, errorMessage, null);
+  private void finishWithError(final String errorCode, final String errorMessage) {
+    //pendingResult.error(errorCode, errorMessage, null);
+    final MethodChannel.Result result = pendingResult;
+    activity.runOnUiThread(new Runnable() {
+      @Override
+      public void run() {
+        result.error(errorCode, errorMessage, null);
+      }
+    });
     clearMethodCallAndResult();
   }
 
