@@ -7,6 +7,7 @@ package io.flutter.plugins.videoplayer;
 import static com.google.android.exoplayer2.Player.REPEAT_MODE_ALL;
 import static com.google.android.exoplayer2.Player.REPEAT_MODE_OFF;
 
+import com.google.android.exoplayer2.PlaybackParameters;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
@@ -232,6 +233,14 @@ public class VideoPlayerPlugin implements MethodCallHandler {
       return exoPlayer.getCurrentPosition();
     }
 
+    void setSpeed(double value) {
+      float bracketedValue = (float) value;
+      PlaybackParameters existingParam = exoPlayer.getPlaybackParameters();
+      PlaybackParameters newParameter =
+          new PlaybackParameters(bracketedValue, existingParam.pitch, existingParam.skipSilence);
+      exoPlayer.setPlaybackParameters(newParameter);
+    }
+
     @SuppressWarnings("SuspiciousNameCombination")
     private void sendInitialized() {
       if (isInitialized) {
@@ -400,6 +409,10 @@ public class VideoPlayerPlugin implements MethodCallHandler {
       case "dispose":
         player.dispose();
         videoPlayers.remove(textureId);
+        result.success(null);
+        break;
+      case "setSpeed":
+        player.setSpeed((Double) call.argument("speed"));
         result.success(null);
         break;
       default:
