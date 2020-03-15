@@ -437,8 +437,10 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
   /// Negative speeds are not supported
   /// speeds above 2x are not supported on iOS
   Future<void> setSpeed(double speed) async {
-    value = value.copyWith(speed: speed);
-    await _applySpeed();
+    if (speed != value.speed) {
+      value = value.copyWith(speed: speed);
+      await _applySpeed();
+    }
   }
 }
 
