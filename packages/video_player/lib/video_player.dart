@@ -439,8 +439,8 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
   Future<void> setSpeed(double speed) async {
     if (speed != value.speed) {
       value = value.copyWith(speed: speed);
-      await _applySpeed();
     }
+    await _applySpeed();
   }
 }
 
